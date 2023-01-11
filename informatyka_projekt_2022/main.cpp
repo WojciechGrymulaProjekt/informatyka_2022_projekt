@@ -7,6 +7,7 @@
 #include <string>
 #include <ctime>
 #include <cstdlib>
+#define max_menu_items 4
 class Player {
 private:
 	int score=0;
@@ -464,24 +465,69 @@ public:
 		this->setString("Game Over");
 	}
 };
-//
-//class pomoc : public sf::Text {
-//private:
-//	sf::Font czcionka;
-//public:
-//	pomoc() {
-//		if (!czcionka.loadFromFile("arial.ttf"))
-//			return;
-//		this->setFont(czcionka);
-//		this->setCharacterSize(100);
-//		this->setPosition(300, 120);
-//		this->setFillColor(sf::Color::Cyan);
-//		this->rotate(0);
-//		this->setString("Game Over");
-//		this->setString("Game Over2");
-//	}
-//};
+class Menu {
+private:
+	int selectedItem;
+	sf::Font czcionka;
+	sf::Text opcja[max_menu_items];
+public:
+	Menu(float width, float height);
+	~Menu();
+	
+	void draw(sf::RenderWindow& window);
+	void mUp();
+	void mDwn();
+	int getPressedItem() { return selectedItem; }
+};
+Menu::Menu(float width_in, float height_in) {
+	if (!czcionka.loadFromFile("arial.ttf")) {
+		return;
+	}
+	opcja[0].setFont(czcionka);
+	opcja[0].setFillColor(sf::Color::Red);
+	opcja[0].setString("Start");
+	opcja[0].setPosition(sf::Vector2f(width_in / 2-50, height_in / (max_menu_items+1) * 1));
 
+	opcja[1].setFont(czcionka);
+	opcja[1].setFillColor(sf::Color::White);
+	opcja[1].setString("Ranking");
+	opcja[1].setPosition(sf::Vector2f(width_in / 2-50, height_in / (max_menu_items + 1) * 2));
+
+	opcja[2].setFont(czcionka);
+	opcja[2].setFillColor(sf::Color::White);
+	opcja[2].setString("Pomoc");
+	opcja[2].setPosition(sf::Vector2f(width_in / 2-50, height_in / (max_menu_items + 1) * 3));
+
+	opcja[3].setFont(czcionka);
+	opcja[3].setFillColor(sf::Color::White);
+	opcja[3].setString("Wyjscie");
+	opcja[3].setPosition(sf::Vector2f(width_in / 2-50, height_in / (max_menu_items + 1) * 4));
+	selectedItem = 0;
+}
+Menu::~Menu()
+{
+
+}
+void Menu::draw(sf::RenderWindow& window)
+{
+	for (int i = 0; i < max_menu_items; i++) {
+		window.draw(opcja[i]);
+	}
+}
+void Menu::mUp() {
+	if (selectedItem - 1 >= 0) {
+		opcja[selectedItem].setFillColor(sf::Color::White);
+		selectedItem=selectedItem-1;
+		opcja[selectedItem].setFillColor(sf::Color::Red);
+	}
+}
+void Menu::mDwn() {
+	if (selectedItem + 1 < max_menu_items) {
+		opcja[selectedItem].setFillColor(sf::Color::White);
+		selectedItem=selectedItem +1;
+		opcja[selectedItem].setFillColor(sf::Color::Red);
+	}
+}
 int main()
 {
 	int Nt = 12;
@@ -495,7 +541,7 @@ int main()
 	pocisk bl(2000, 100);
 	Player p1(0);
 	gameOver(go);
-	pomoc(help);
+	Menu menu(window.getSize().x, window.getSize().y);
 	invader2 invadery(Nt);
 	sf::Clock zegar;
 	sf::Clock zegar2;
@@ -505,7 +551,7 @@ int main()
 	float zegarS3=10.0f;
 	int wasExectued = 0;
 	int wasExectued2 = 0;
-	int freeze = 0;
+	int freeze = 1;
 	int pressed = 0;
 	oknopomoc->setText("Punkty: ", "koks2", "koks3","zycie","fala","fala");
 	while (window.isOpen())
@@ -548,13 +594,34 @@ int main()
 					if (event.key.code == sf::Keyboard::Escape) {
 						freeze = 0;
 					}
-
 				}
 			case sf::Event::KeyReleased:
-				if (event.key.code==sf::Keyboard::F1) {
-					
-					pressed = 1;
+				if (event.type == sf::Event::KeyReleased)
+				{
+					if (event.key.code == sf::Keyboard::F1) {
+						pressed = 1;
 						freeze = 1;
+					}
+					if (event.key.code == sf::Keyboard::Up) {
+						menu.mUp();
+					}
+					if (event.key.code == sf::Keyboard::Down) {
+						menu.mDwn();
+					}
+					if (event.key.code == sf::Keyboard::Return) {
+						switch (menu.getPressedItem()) {
+						case 0:
+							freeze = 0;
+							break;
+						case 1:
+							break;
+						case 2:
+							break;
+						case 3:
+							window.close();
+							break;
+						}
+					}
 				}
 			}
 		}
@@ -566,11 +633,14 @@ int main()
 		sprintf(str3, "%d", fala);
 		sprintf(str2, "%d", someint2);
 		sprintf(str, "%d", someint);
+
 		oknopomoc->setText("Score: ", str, "Health: ",str2,"Fala: ",str3);
 		p1.setScore(invadery.getKill());
 		window.clear(sf::Color::Black);
 		window.draw(pb.getStatek());
 		window.draw(bl.getPocisk());
+		menu.draw(window);
+	
 		if (pressed == 1 && freeze==1)
 		{
 			window.draw(go);
@@ -594,7 +664,6 @@ int main()
 			invadery.getInvaders(bl.getPocisk());
 			zegar3.restart();
 		}
-	
 		window.display();
 		
 	}
