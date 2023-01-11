@@ -9,7 +9,7 @@
 #include <cstdlib>
 class Player {
 private:
-	int score;
+	int score=0;
 public:
 	Player(int score_in);
 	int getScore() { return score; }
@@ -209,7 +209,8 @@ public:
 	void sprawdzKolizje();
 	void getInvaders(sf::Sprite sp_in);
 	int getKill();
-
+	void setPosition();
+	int setZycie(int zycie_in);
 };
 invader2::invader2(int Nt)
 {
@@ -246,11 +247,11 @@ void invader2::move2(float xVel_in, float yVel_in)
 		}
 		else if (position3.x > 1150)
 		{
-			invaderT[i].move(-1150.0, 0);
+			invaderT[i].move(-1150.0, 50);
 		}
 		else if (position3.x < 0)
 		{
-			invaderT[i].move(1150.0, 0.0);
+			invaderT[i].move(1150.0, 50);
 		}
 		else
 		{
@@ -285,7 +286,7 @@ void invader2::getInvaders(sf::Sprite bl_in)
 	{
 		if (invaderT[i].getGlobalBounds().intersects(bl_in.getGlobalBounds()))
 		{
-			invaderT[i].setPosition(10000, 10000);
+			invaderT[i].setPosition(10000, -10000);
 			kill += 1;
 		}
 	}
@@ -298,6 +299,25 @@ int invader2::getKill() {
 	}
 	return kill;
 }
+void invader2::setPosition() {
+	float x = 0, y = 0;
+	float j[12] = { 51.0f,151.0f,251.0f,351.0f,451.0f,551.0f,651.0f,751.0f,851.0f,951.0f,1051.0f,1149.0f };
+	for (int i = 0; i < N; i++) {
+		x = j[i];
+		y = 50.0f;
+		invaderT[i].setPosition(sf::Vector2f(x, y));
+	}
+}
+int invader2::setZycie(int zycie_in) {
+	int health = zycie_in;
+	for (int i = 0; i < N; i++) {
+		sf::Vector2f position = invaderT[i].getPosition();
+		if (position.y > 760) {
+			health -= 1;
+		}
+	}
+	return health;
+}
 class interfejs
 {
 protected:
@@ -308,13 +328,15 @@ protected:
 	sf::Text* lt;
 	sf::Text* cb;
 	sf::Text* rtp;
+	sf::Text* fal;
+	sf::Text* falnr;
 	sf::Font* czcionka;
 	sf::RenderWindow* windowT;
 	void init();
 public:
 	interfejs(sf::Vector2f _ramka, sf::RenderWindow* _windowT);
 	interfejs() :windowT(NULL) {}
-	void setText(std::string leftT, std::string rightT, std::string centerB, std::string rtpP);
+	void setText(std::string leftT, std::string rightT, std::string centerB, std::string rtpP,std::string falP, std::string falnP);
 	void draw();
 };
 class interfejsTekst : public interfejs
@@ -357,6 +379,8 @@ void interfejs::init()
 	rt = new sf::Text;
 	cb = new sf::Text;
 	rtp = new sf::Text;
+	fal = new sf::Text;
+	falnr = new sf::Text;
 	obszar = new sf::RectangleShape;
 
 	lt->setFont(*czcionka);
@@ -367,7 +391,7 @@ void interfejs::init()
 
 	rt->setFont(*czcionka);
 	rt->setCharacterSize(28);
-	rt->setPosition(110, 5);
+	rt->setPosition(100, 5);
 	rt->setFillColor(sf::Color::White);
 	rt->setString("Right Top");
 
@@ -383,12 +407,24 @@ void interfejs::init()
 	rtp->setFillColor(sf::Color::White);
 	rtp->setString("Right top Pomoc");
 
+	fal->setFont(*czcionka);
+	fal->setCharacterSize(28);
+	fal->setPosition(250, 5);
+	fal->setFillColor(sf::Color::Green);
+	fal->setString("Right top Pomoc");
+
+	falnr->setFont(*czcionka);
+	falnr->setCharacterSize(28);
+	falnr->setPosition(320, 5);
+	falnr->setFillColor(sf::Color::White);
+	falnr->setString("Right top Pomoc");
+
 
 }
 interfejs::interfejs(sf::Vector2f _ramka, sf::RenderWindow* _windowT) :ramka(_ramka), windowT(_windowT) {
 	this->init();
 }
-void interfejs::setText(std::string leftT, std::string rightT, std::string centerB,std::string rtpP)
+void interfejs::setText(std::string leftT, std::string rightT, std::string centerB,std::string rtpP,std::string falP,std::string falnP)
 {
 	if (lt != NULL && rt != NULL && cb != NULL)
 	{
@@ -396,6 +432,8 @@ void interfejs::setText(std::string leftT, std::string rightT, std::string cente
 		this->rt->setString(rightT);
 		this->cb->setString(centerB);
 		this->rtp->setString(rtpP);
+		this->fal->setString(falP);
+		this->falnr->setString(falnP);
 	}
 }
 void interfejs::draw()
@@ -406,6 +444,8 @@ void interfejs::draw()
 		windowT->draw(*rt);
 		windowT->draw(*cb);
 		windowT->draw(*rtp);
+		windowT->draw(*fal);
+		windowT->draw(*falnr);
 		windowT->draw(*obszar);
 	}
 }
@@ -420,15 +460,33 @@ public:
 		this->setCharacterSize(100);
 		this->setPosition(300, 120);
 		this->setFillColor(sf::Color::Cyan);
-		this->rotate(45);
+		this->rotate(0);
 		this->setString("Game Over");
 	}
 };
+//
+//class pomoc : public sf::Text {
+//private:
+//	sf::Font czcionka;
+//public:
+//	pomoc() {
+//		if (!czcionka.loadFromFile("arial.ttf"))
+//			return;
+//		this->setFont(czcionka);
+//		this->setCharacterSize(100);
+//		this->setPosition(300, 120);
+//		this->setFillColor(sf::Color::Cyan);
+//		this->rotate(0);
+//		this->setString("Game Over");
+//		this->setString("Game Over2");
+//	}
+//};
+
 int main()
 {
-	int fala = 1;
 	int Nt = 12;
 	int score = 0;
+	int fala = 1;
 	sf::RenderWindow window(sf::VideoMode(1200, 800), "Projekt infa");
 	sf::Event event;
 	interfejs* oknoGlowne = new interfejs(sf::Vector2f(1200.f, 800.f), &window);
@@ -436,13 +494,23 @@ int main()
 	Statek pb(580, 730, window.getSize().x - 100, window.getSize().y - 100);
 	pocisk bl(2000, 100);
 	Player p1(0);
+	gameOver(go);
+	pomoc(help);
 	invader2 invadery(Nt);
 	sf::Clock zegar;
 	sf::Clock zegar2;
 	sf::Clock zegar3;
-	oknopomoc->setText("Punkty: ", "koks2", "koks3","zycie");
+	float zegarS1=5.0f;
+	float zegarS2=1.0f;
+	float zegarS3=10.0f;
+	int wasExectued = 0;
+	int wasExectued2 = 0;
+	int freeze = 0;
+	int pressed = 0;
+	oknopomoc->setText("Punkty: ", "koks2", "koks3","zycie","fala","fala");
 	while (window.isOpen())
 	{
+		
 		while (window.pollEvent(event))
 		{
 
@@ -455,7 +523,7 @@ int main()
 				break;
 
 			case sf::Event::KeyPressed:
-				if (event.type == sf::Event::KeyPressed)
+				if (event.type == sf::Event::KeyPressed && freeze == 0)
 				{
 					if (event.key.code == sf::Keyboard::A)
 					{
@@ -471,50 +539,66 @@ int main()
 				{
 					if (event.key.code == sf::Keyboard::Space)
 					{
-						if (zegar2.getElapsedTime().asSeconds() > 1.0f)
+						if (zegar2.getElapsedTime().asSeconds() > zegarS2 && freeze == 0)
 						{
 							bl.setPosition(pb.getPosition().x + 20, pb.getPosition().y + 35);
 							zegar2.restart();
 						}
 					}
+					if (event.key.code == sf::Keyboard::Escape) {
+						freeze = 0;
+					}
+
+				}
+			case sf::Event::KeyReleased:
+				if (event.key.code==sf::Keyboard::F1) {
+					
+					pressed = 1;
+						freeze = 1;
 				}
 			}
-
 		}
 		int someint = invadery.getKill();
 		char str[12];
+		int someint2 = invadery.setZycie(3);
+		char str2[12];
+		char str3[12];
+		sprintf(str3, "%d", fala);
+		sprintf(str2, "%d", someint2);
 		sprintf(str, "%d", someint);
-		oknopomoc->setText("Score: ", str, "Health: ","3");
-
+		oknopomoc->setText("Score: ", str, "Health: ",str2,"Fala: ",str3);
+		p1.setScore(invadery.getKill());
 		window.clear(sf::Color::Black);
 		window.draw(pb.getStatek());
 		window.draw(bl.getPocisk());
+		if (pressed == 1 && freeze==1)
+		{
+			window.draw(go);
+		}
 		invadery.draw(window);
+		if (wasExectued == fala-1 && p1.getScore() == Nt*fala) {
+			wasExectued = fala;
+			invadery.setPosition();
+			fala++;
+		}
 		oknopomoc->draw();
-		if (zegar.getElapsedTime().asMilliseconds() > 5.0f)
+		if (zegar.getElapsedTime().asMilliseconds() > zegarS1 && freeze == 0)
 		{
 			bl.animuj();
 			zegar.restart();
 
 		}
-		if (zegar3.getElapsedTime().asMilliseconds() > 10.0f) {
-			invadery.move2(1, 0);
-			invadery.sprawdzKolizje();
+		if (zegar3.getElapsedTime().asMilliseconds() > zegarS3 && freeze == 0) {
+			invadery.move2(1*fala, 0);
+			
 			invadery.getInvaders(bl.getPocisk());
-
 			zegar3.restart();
-
-
-
-
-
-
 		}
-
-		//printf("%d", invadery.getKill());
+	
 		window.display();
-		p1.setScore(invadery.getKill());
+		
 	}
+	printf("%d", invadery.setZycie(3));
 	p1.drawScore();
 	return 0;
 }
