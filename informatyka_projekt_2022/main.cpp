@@ -7,11 +7,12 @@
 #include <string>
 #include <ctime>
 #include <cstdlib>
+#include <fstream>
 
 #define max_menu_items 4
 class Player {
 private:
-	int score=0;
+	int score = 0;
 public:
 	Player(int score_in);
 	int getScore() { return score; }
@@ -253,7 +254,7 @@ int invader2::setZycie(int zycie_in) {
 	int health = zycie_in;
 	for (int i = 0; i < N; i++) {
 		sf::Vector2f position = invaderT[i].getPosition();
-		if (position.y > 760) {
+		if (position.y > 700) {
 			health -= 1;
 			przeszlo = 1;
 		}
@@ -278,7 +279,7 @@ protected:
 public:
 	interfejs(sf::Vector2f _ramka, sf::RenderWindow* _windowT);
 	interfejs() :windowT(NULL) {}
-	void setText(std::string leftT, std::string rightT, std::string centerB, std::string rtpP,std::string falP, std::string falnP);
+	void setText(std::string leftT, std::string rightT, std::string centerB, std::string rtpP, std::string falP, std::string falnP);
 	void draw();
 };
 class interfejsTekst : public interfejs
@@ -339,7 +340,7 @@ void interfejs::init()
 
 	cb->setFont(*czcionka);
 	cb->setCharacterSize(28);
-	cb->setPosition(ramka.x -150, 5);
+	cb->setPosition(ramka.x - 150, 5);
 	cb->setFillColor(sf::Color::Red);
 	cb->setString("Right Top");
 
@@ -366,7 +367,7 @@ void interfejs::init()
 interfejs::interfejs(sf::Vector2f _ramka, sf::RenderWindow* _windowT) :ramka(_ramka), windowT(_windowT) {
 	this->init();
 }
-void interfejs::setText(std::string leftT, std::string rightT, std::string centerB,std::string rtpP,std::string falP,std::string falnP)
+void interfejs::setText(std::string leftT, std::string rightT, std::string centerB, std::string rtpP, std::string falP, std::string falnP)
 {
 	if (lt != NULL && rt != NULL && cb != NULL)
 	{
@@ -391,7 +392,7 @@ void interfejs::draw()
 		windowT->draw(*obszar);
 	}
 }
-class help{
+class help {
 private:
 	sf::Font czcionka;
 	sf::Text menu[5];
@@ -422,7 +423,7 @@ help::help(float width_in, float height_in) {
 	menu[1].setCharacterSize(28);
 	menu[1].setFillColor(sf::Color::White);
 	menu[1].setString("[D] - poruszanie statkiem w prawo");
-	menu[1].setPosition(sf::Vector2f(width_in / 2 - 200, height_in / (4+2) * 3));
+	menu[1].setPosition(sf::Vector2f(width_in / 2 - 200, height_in / (4 + 2) * 3));
 
 	menu[2].setFont(czcionka);
 	menu[2].setCharacterSize(28);
@@ -442,7 +443,7 @@ help::help(float width_in, float height_in) {
 	menu[4].setCharacterSize(25);
 	menu[4].setFillColor(sf::Color::White);
 	menu[4].setString("Zniszcz jak najwiecej przeciwnikow \nzanim osiagna cel \n swojej trasy, powstrzymaj ich, \n przed dotarciem na sam dol!");
-	menu[4].setPosition(sf::Vector2f(width_in / 2 - 200, height_in / (4+1) * 1));
+	menu[4].setPosition(sf::Vector2f(width_in / 2 - 200, height_in / (4 + 1) * 1));
 }
 help::~help() {
 
@@ -464,7 +465,7 @@ private:
 public:
 	Menu(float width, float height);
 	~Menu();
-	
+
 	void draw(sf::RenderWindow& window);
 	void mUp();
 	void mDwn();
@@ -477,22 +478,22 @@ Menu::Menu(float width_in, float height_in) {
 	opcja[0].setFont(czcionka);
 	opcja[0].setFillColor(sf::Color::Red);
 	opcja[0].setString("Start");
-	opcja[0].setPosition(sf::Vector2f(width_in / 2-50, height_in / (max_menu_items+1) * 1));
+	opcja[0].setPosition(sf::Vector2f(width_in / 2 - 50, height_in / (max_menu_items + 1) * 1));
 
 	opcja[1].setFont(czcionka);
 	opcja[1].setFillColor(sf::Color::White);
-	opcja[1].setString("Ranking");
-	opcja[1].setPosition(sf::Vector2f(width_in / 2-50, height_in / (max_menu_items + 1) * 2));
+	opcja[1].setString("Ostatnie gry");
+	opcja[1].setPosition(sf::Vector2f(width_in / 2 - 50, height_in / (max_menu_items + 1) * 2));
 
 	opcja[2].setFont(czcionka);
 	opcja[2].setFillColor(sf::Color::White);
 	opcja[2].setString("Pomoc");
-	opcja[2].setPosition(sf::Vector2f(width_in / 2-50, height_in / (max_menu_items + 1) * 3));
+	opcja[2].setPosition(sf::Vector2f(width_in / 2 - 50, height_in / (max_menu_items + 1) * 3));
 
 	opcja[3].setFont(czcionka);
 	opcja[3].setFillColor(sf::Color::White);
 	opcja[3].setString("Wyjscie");
-	opcja[3].setPosition(sf::Vector2f(width_in / 2-50, height_in / (max_menu_items + 1) * 4));
+	opcja[3].setPosition(sf::Vector2f(width_in / 2 - 50, height_in / (max_menu_items + 1) * 4));
 	selectedItem = 0;
 
 	tekstura.loadFromFile("ramka.png");
@@ -513,14 +514,14 @@ void Menu::draw(sf::RenderWindow& window)
 void Menu::mUp() {
 	if (selectedItem - 1 >= 0) {
 		opcja[selectedItem].setFillColor(sf::Color::White);
-		selectedItem=selectedItem-1;
+		selectedItem = selectedItem - 1;
 		opcja[selectedItem].setFillColor(sf::Color::Red);
 	}
 }
 void Menu::mDwn() {
 	if (selectedItem + 1 < max_menu_items) {
 		opcja[selectedItem].setFillColor(sf::Color::White);
-		selectedItem=selectedItem +1;
+		selectedItem = selectedItem + 1;
 		opcja[selectedItem].setFillColor(sf::Color::Red);
 	}
 }
@@ -543,116 +544,176 @@ background::background(int nm) {
 void background::draw(sf::RenderWindow& window) {
 	window.draw(tlo);
 }
-typedef struct {
-	char nazwa[20];
-	int liczb_pkt;
-} gracz_cechy;
-void players_to_file(char *text_in)
+void players_to_file(char* text_in, int score_in)
 {
-	srand(time(NULL));
-	gracz_cechy playerschar[10];
+	int score = score_in;
 	FILE* fp;
 	fp = fopen("gracze.txt", "a");
-	fseek(fp, 0, SEEK_END);
 	fputs(text_in, fp);
-
+	fprintf(fp, "%d \n", score);
 	fclose(fp);
 }
-
-int porownaj(const void* left, const void* right) {
-	const gracz_cechy* a = (const gracz_cechy*)left;
-	const gracz_cechy* b = (const gracz_cechy*)right;
-	if (a->liczb_pkt > b->liczb_pkt) {
-		return -1;
-	}
-	else if (a->liczb_pkt < b->liczb_pkt) {
-		return 1;
-	}
-	else {
-		return 0;
-	}
-}
-class players_list {
+class playerszap {
 private:
-	sf::Text* players;//dane tekstowe do wyswietlenia
-	gracz_cechy* player_char;//rzeczywista specyfikacja graczy
+	sf::Text players[10];
 	sf::Font czcionka;
-	int Np;
+	std::string graczrank[100];
 public:
-	players_list(int N);
-	void laduj();
-	void sortuj();
-	void draw(sf::RenderWindow& window);
+	playerszap(float width_in, float height_in);
+	void readfile();
+	void setPlayers();
+	void drawPlayers(sf::RenderWindow& window);
+	void wyczysc();
 };
-
-players_list::players_list(int N)
-{
-
-	if (!czcionka.loadFromFile("arcade.ttf"))
-		return;
-
-	FILE* fp = fopen("gracze.txt", "r");
-	unsigned int rozmiar_plik = 0, ile_graczy = 0;
-	fseek(fp, 0, SEEK_END);
-	rozmiar_plik = ftell(fp);
-	ile_graczy = rozmiar_plik / sizeof(gracz_cechy);
-	if (N > ile_graczy)
-	{
-		Np = 5;
-	}
-	else
-	{
-		Np = N;
-	}
-
-	players = new sf::Text[Np];
-	player_char = new gracz_cechy[Np];
-
-	rewind(fp);
-	fread(player_char, sizeof(gracz_cechy), Np, fp);
-	fclose(fp);
-
-	for (int i = 0; i < Np; i++)
-	{
+playerszap::playerszap(float width_in, float height_in) {
+	for (int i = 0; i < 10; i++) {
 		players[i].setFont(czcionka);
 		players[i].setCharacterSize(30);
 		players[i].setFillColor(sf::Color::Red);
-		players[i].setPosition(10 + 800 / 4, 20 + i * 50);
-
 	}
 }
+void playerszap::readfile() {
+	std::ifstream gracze("gracze.txt", std::ios::app);
 
-
-void players_list::laduj()
-{
-	std::string tmp_tekst;
-	for (int i = 0; i < Np; i++)
-	{
+	for (int i = 0; i < 100; i++) {
+		gracze >> graczrank[i];
+		if (graczrank[i] == "") {
+			graczrank[i] = "BRAK";
+		}
+	}
+	gracze.close();
+}
+void playerszap::setPlayers() {
+	czcionka.loadFromFile("arcade.ttf");
+	for (int i = 0; i < 10; i++) {
+		players[i].setString(graczrank[i]);
 		players[i].setFont(czcionka);
 		players[i].setCharacterSize(30);
 		players[i].setFillColor(sf::Color::Red);
-		players[i].setPosition(10 + 800 / 4, 20 + i * 50);
+		if (i % 2 == 0 || i == 0) {
+			players[i].setPosition(1200 / 2 - 250, 800 / (5 + 1) * i / 2 + 100);
+		}
+		else if (i % 2 != 0)
+		{
+			players[i].setPosition(1200 / 2 + 250, 800 / (5 + 1) * (i - 1) / 2 + 100);
+		}
 
-		tmp_tekst.assign(player_char[i].nazwa);
-		tmp_tekst += " Punkty: " + std::to_string(player_char[i].liczb_pkt);
-		players[i].setString(tmp_tekst);
 	}
 }
-
-
-void players_list::sortuj()
-{
-	qsort(player_char, Np, sizeof(gracz_cechy), porownaj);
-}
-
-void players_list::draw(sf::RenderWindow& window)
-{
-	for (int i = 0; i < Np; i++)
-	{
+void playerszap::drawPlayers(sf::RenderWindow& window) {
+	for (int i = 0; i < 10; i++) {
 		window.draw(players[i]);
 	}
 }
+void playerszap::wyczysc() {
+	FILE* fp;
+	fp = fopen("gracze.txt", "w+");
+	fclose(fp);
+}
+class menuz {
+private:
+	sf::Font czcionka;
+	sf::Text menu[13];
+	sf::Sprite ramka2;
+	sf::Texture tekstura;
+	int selectedItem;
+public:
+	menuz(float width_in, float height_in);
+	~menuz();
 
+	void draw(sf::RenderWindow& window);
+};
+menuz::menuz(float width_in, float height_in) {
+	if (!czcionka.loadFromFile("arcade.ttf"))
+		return;
+
+
+	menu[11].setFont(czcionka);
+	menu[11].setCharacterSize(30);
+	menu[11].setFillColor(sf::Color::White);
+	menu[11].setString("Ostatnie gry");
+	menu[11].setPosition(sf::Vector2f(400, 15));
+
+	menu[0].setFont(czcionka);
+	menu[0].setCharacterSize(30);
+	menu[0].setFillColor(sf::Color::White);
+	menu[0].setString("1. Nazwa: ");
+	menu[0].setPosition(sf::Vector2f(width_in / 2 - 400, 800 / (5 + 1) * 0 / 2 + 100));
+
+	menu[1].setFont(czcionka);
+	menu[1].setCharacterSize(30);
+	menu[1].setFillColor(sf::Color::White);
+	menu[1].setString("Punkty: ");
+	menu[1].setPosition(sf::Vector2f(width_in / 2 + 20, height_in / (5 + 1) * 0 / 2 + 100));
+
+	menu[2].setFont(czcionka);
+	menu[2].setCharacterSize(30);
+	menu[2].setFillColor(sf::Color::White);
+	menu[2].setString("2. Nazwa: ");
+	menu[2].setPosition(sf::Vector2f(width_in / 2 - 400, height_in / (5 + 1) * 1 + 100));
+
+	menu[3].setFont(czcionka);
+	menu[3].setCharacterSize(30);
+	menu[3].setFillColor(sf::Color::White);
+	menu[3].setString("Punkty: ");
+	menu[3].setPosition(sf::Vector2f(width_in / 2 + 20, height_in / (5 + 1) * 1 + 100));
+
+	menu[4].setFont(czcionka);
+	menu[4].setCharacterSize(30);
+	menu[4].setFillColor(sf::Color::White);
+	menu[4].setString("3. Nazwa: ");
+	menu[4].setPosition(sf::Vector2f(width_in / 2 - 400, height_in / (5 + 1) * 2 + 100));
+
+	menu[5].setFont(czcionka);
+	menu[5].setCharacterSize(30);
+	menu[5].setFillColor(sf::Color::White);
+	menu[5].setString("Punkty: ");
+	menu[5].setPosition(sf::Vector2f(width_in / 2 + 20, height_in / (5 + 1) * 2 + 100));
+
+	menu[6].setFont(czcionka);
+	menu[6].setCharacterSize(30);
+	menu[6].setFillColor(sf::Color::White);
+	menu[6].setString("4. Nazwa: ");
+	menu[6].setPosition(sf::Vector2f(width_in / 2 - 400, height_in / (5 + 1) * 3 + 100));
+
+	menu[7].setFont(czcionka);
+	menu[7].setCharacterSize(30);
+	menu[7].setFillColor(sf::Color::White);
+	menu[7].setString("Punkty: ");
+	menu[7].setPosition(sf::Vector2f(width_in / 2 + 20, height_in / (5 + 1) * 3 + 100));
+
+	menu[8].setFont(czcionka);
+	menu[8].setCharacterSize(30);
+	menu[8].setFillColor(sf::Color::White);
+	menu[8].setString("5. Nazwa: ");
+	menu[8].setPosition(sf::Vector2f(width_in / 2 - 400, height_in / (5 + 1) * 4 + 100));
+
+	menu[9].setFont(czcionka);
+	menu[9].setCharacterSize(30);
+	menu[9].setFillColor(sf::Color::White);
+	menu[9].setString("Punkty: ");
+	menu[9].setPosition(sf::Vector2f(width_in / 2 + 20, height_in / (5 + 1) * 4 + 100));
+
+	menu[10].setFont(czcionka);
+	menu[10].setCharacterSize(26);
+	menu[10].setFillColor(sf::Color::Green);
+	menu[10].setString("Wcisnij [ESC] aby wrocic do menu");
+	menu[10].setPosition(sf::Vector2f(1200 / 2 - 400, 760));
+
+	menu[12].setFont(czcionka);
+	menu[12].setCharacterSize(26);
+	menu[12].setFillColor(sf::Color::Green);
+	menu[12].setString("Wcisnij [F2] aby wyczyscic historie");
+	menu[12].setPosition(sf::Vector2f(1200 / 2 + 20, 760));
+}
+menuz::~menuz() {
+
+}
+void menuz::draw(sf::RenderWindow& window) {
+	for (int i = 0; i < 13; i++) {
+		window.draw(menu[i]);
+	}
+}
 class poz {
 private:
 	sf::Font czcionka;
@@ -688,13 +749,13 @@ poz::poz(float width_in, float height_in) {
 	menu[1].setCharacterSize(28);
 	menu[1].setFillColor(sf::Color::Red);
 	menu[1].setString("Poziom latwy");
-	menu[1].setPosition(sf::Vector2f(width_in / 2 - 200, height_in / (4+2 ) * 2));
+	menu[1].setPosition(sf::Vector2f(width_in / 2 - 200, height_in / (4 + 2) * 2));
 
 	menu[2].setFont(czcionka);
 	menu[2].setCharacterSize(28);
 	menu[2].setFillColor(sf::Color::White);
 	menu[2].setString("Poziom normalny");
-	menu[2].setPosition(sf::Vector2f(width_in / 2 - 200, height_in / (4 +3) * 3));
+	menu[2].setPosition(sf::Vector2f(width_in / 2 - 200, height_in / (4 + 3) * 3));
 
 
 
@@ -702,7 +763,7 @@ poz::poz(float width_in, float height_in) {
 	menu[3].setCharacterSize(28);
 	menu[3].setFillColor(sf::Color::White);
 	menu[3].setString("Poziom trudny");
-	menu[3].setPosition(sf::Vector2f(width_in / 2 - 200, height_in / (4+3.5) * 4));
+	menu[3].setPosition(sf::Vector2f(width_in / 2 - 200, height_in / (4 + 3.5) * 4));
 	selectedItem = 1;
 }
 poz::~poz() {
@@ -768,11 +829,57 @@ void gameo::draw(sf::RenderWindow& window)
 		window.draw(menu[i]);
 	}
 }
+class wyjsc {
+private:
+	sf::Font czcionka;
+	sf::Text menu[3];
+	sf::Sprite ramka2;
+	sf::Texture tekstura;
+public:
+	wyjsc(float width_in, float height_in);
+	~wyjsc();
 
+	void draw(sf::RenderWindow& window);
+};
+wyjsc::wyjsc(float width_in, float height_in) {
+	if (!czcionka.loadFromFile("arcade.ttf"))
+		return;
+
+
+	menu[0].setFont(czcionka);
+	menu[0].setCharacterSize(30);
+	menu[0].setFillColor(sf::Color::White);
+	menu[0].setString("Gra wstrzymana");
+	menu[0].setPosition(sf::Vector2f(width_in / 2 - 200, height_in / (3+1) * 1));
+
+	menu[1].setFont(czcionka);
+	menu[1].setCharacterSize(30);
+	menu[1].setFillColor(sf::Color::Red);
+	menu[1].setString("Aby wyjsc wcisnij [Enter]");
+	menu[1].setPosition(sf::Vector2f(width_in / 2 - 200, height_in / (3+1) * 2));
+
+	menu[2].setFont(czcionka);
+	menu[2].setCharacterSize(30);
+	menu[2].setFillColor(sf::Color::Green);
+	menu[2].setString("Aby kontynuowac wcisnij [F4]");
+	menu[2].setPosition(sf::Vector2f(width_in / 2 - 200, height_in / (3+1) * 3));
+
+
+	tekstura.loadFromFile("ramka.png");
+	ramka2.setTexture(tekstura);
+	ramka2.setPosition(330, 00);
+}
+wyjsc::~wyjsc() {
+
+}
+void wyjsc::draw(sf::RenderWindow &window) {
+	window.draw(ramka2);
+	for (int i = 0; i < 3; i++) {
+		window.draw(menu[i]);
+	}
+}
 int main()
 {
-	//players_to_file();
-	
 	int Nt = 12;
 	int score = 0;
 	int fala = 1;
@@ -782,12 +889,15 @@ int main()
 	interfejs* oknoGlowne = new interfejs(sf::Vector2f(1200.f, 800.f), &window);
 	interfejsTekst* oknopomoc = new interfejsTekst(sf::Vector2f(1200.f, 800.f), &window);
 	Statek pb(580, 730, window.getSize().x - 100, window.getSize().y - 100);
-	pocisk bl(2000,-10);
+	pocisk bl(2000, -10);
 	Player p1(0);
+	playerszap playz(window.getSize().x, window.getSize().y);
 	Menu menu(window.getSize().x, window.getSize().y);
 	help help(window.getSize().x, window.getSize().y);
 	poz poz(window.getSize().x, window.getSize().y);
 	gameo gameo(window.getSize().x, window.getSize().y);
+	menuz menuz(window.getSize().x, window.getSize().y);
+	wyjsc wyjsc(window.getSize().x, window.getSize().y);
 	invader2 invadery(Nt);
 	background tlo(0);
 	sf::Clock zegar;
@@ -796,27 +906,27 @@ int main()
 	sf::Font czcion;
 	czcion.loadFromFile("arcade.ttf");
 	sf::String playerInput;
-	sf::Text playerText("",czcion,25);
-	playerText.setPosition(1200 / 2 - 200, 800 / (4-1) * 1);
+	sf::Text playerText("", czcion, 25);
+	playerText.setPosition(1200 / 2 - 200, 800 / (4 - 1) * 1);
 	playerText.setFillColor(sf::Color::Red);
-	players_list* pl = new players_list(8);
-	pl->sortuj();
-	pl->laduj();
-	float zegarS1=5.0f;
-	float zegarS2=1.0f;
-	float zegarS3=10.0f;
+	float zegarS1 = 5.0f;
+	float zegarS2 = 1.0f;
+	float zegarS3 = 10.0f;
 	int wasExectued = 0;
 	int wasExectued2 = 0;
-	int freeze = 0;
-	int pressed = 0;
+	int freeze = 1;
 	int m = 1;
 	int h = 0;
 	int p = 0;
 	int go = 0;
-	oknopomoc->setText("", "", "","","","");
+	int drukuj = 0;
+	int czyszcz = 0;
+	int pressed = 0;
+	int wyj = 0;
+	oknopomoc->setText("", "", "", "", "", "");
 	while (window.isOpen())
 	{
-		
+
 		while (window.pollEvent(event))
 		{
 
@@ -836,14 +946,15 @@ int main()
 					if (event.key.code == sf::Keyboard::Down) {
 						menu.mDwn();
 					}
-					if (event.key.code == sf::Keyboard::Return) {
+					if (event.key.code == sf::Keyboard::Return && wyj == 0) {
 						switch (menu.getPressedItem()) {
 						case 0:
 							m = 0;
 							p = 1;
-							freeze = 1;
 							break;
 						case 1:
+							m = 0;
+							drukuj = 1;
 							break;
 						case 2:
 							h = 1;
@@ -864,7 +975,7 @@ int main()
 					if (event.key.code == sf::Keyboard::Down && m == 0 && p == 1) {
 						poz.mDwn();
 					}
-					if (event.key.code == sf::Keyboard::Return && m == 0 && p == 1) {
+					if (event.key.code == sf::Keyboard::Return && m == 0 && p == 1 && wyj == 0) {
 						switch (poz.getPressedItem()) {
 						case 1:
 							trudnosc = 1;
@@ -885,39 +996,69 @@ int main()
 					}
 
 				}
+				if (event.key.code == sf::Keyboard::F1 && m == 0 && freeze == 0) {
+					h = 1;
+					freeze = 1;
+					pressed = 1;
+				}
+				if (event.key.code == sf::Keyboard::Escape && m == 0 && freeze == 1 && h == 1 && pressed == 0) {
+					h = 0;
+					m = 1;
+				}
+				if (event.key.code == sf::Keyboard::Escape && m == 0 && freeze == 1 && h == 1 && pressed == 1) {
+					h = 0;
+					m = 0;
+					freeze = 0;
+					pressed = 0;
+				}
+				if (event.key.code == sf::Keyboard::Escape && m == 0 && freeze == 1 && drukuj == 1) {
+					drukuj = 0;
+					m = 1;
+				}
 
+				if (event.key.code == sf::Keyboard::F2 && m == 0 && freeze == 1 && drukuj == 1) {
+					czyszcz = 1;
+					m = 1;
+					freeze = 1;
+					drukuj = 0;
+				}
+				if (event.key.code == sf::Keyboard::F3 && wyj==0) {
+					wyj = 1;
+					freeze = 1;
+				}
+				if (event.key.code == sf::Keyboard::Return && wyj == 1) {
+					window.close();
+					wyj = 0;
+				}
+				if (event.key.code == sf::Keyboard::F4 && wyj==1)
+				{
+					freeze = 0;
+					wyj = 0;
+				}
 
-					if (event.key.code == sf::Keyboard::F1 && m == 0 && freeze == 0) {
-						h = 1;
-						freeze = 1;
-					}
-					if (event.key.code == sf::Keyboard::Escape && m == 0 && freeze == 1 && h == 1) {
-						freeze = 0;
-						pressed = 0;
-						h = 0;
-					}
-					if (event.key.code == sf::Keyboard::Escape && m == 0 && freeze == 0 && h == 1) {
-						h = 0;
-						m = 1;
-					}
-					
-					if (event.key.code == sf::Keyboard::Return&&go==1) {
-							printf("2");
-							std::string ok = playerText.getString();
-							char tekst[10];
-							strcpy(tekst, ok.c_str());
-							players_to_file(tekst);
-						}
-					
-				
+				if (event.key.code == sf::Keyboard::Return && go == 1 && wyj == 0) {
+					std::string ok = playerText.getString();
+					char tekst[10];
+					strcpy(tekst, ok.c_str());
+					players_to_file(tekst, p1.getScore());
+					drukuj = 1;
+					freeze = 1;
+					window.close();
+				}
+
+				if (event.key.code == sf::Keyboard::Escape && drukuj == 1) {
+					drukuj = 0;
+					m = 1;
+					go = 0;
+					freeze = 1;
+				}
 
 			}
-			if (event.type == sf::Event::TextEntered && go==1)
+			if (event.type == sf::Event::TextEntered && go == 1)
 			{
 				playerInput += event.text.unicode;
 				playerText.setString(playerInput);
-				printf("1");
-
+				
 			}
 		}
 		int someint = invadery.getKill();
@@ -928,79 +1069,90 @@ int main()
 		sprintf(str3, "%d", fala);
 		sprintf(str2, "%d", someint2);
 		sprintf(str, "%d", someint);
-		
+
 		window.clear();
-		
+
 		tlo.draw(window);
-		if (m == 0 && h==0&&freeze==0) {
+		if (m == 0 && h == 0 && freeze == 0) {
 			tlo.draw(window);
 			window.draw(pb.getStatek());
 			window.draw(bl.getPocisk());
+			oknopomoc->draw();
 			oknopomoc->setText("Score: ", str, "Health: ", str2, "Fala: ", str3);
 			p1.setScore(invadery.getKill());
 			invadery.draw(window);
-			
+
 		}
 		if (p == 1) {
 			poz.draw(window);
 		}
 		pb.sterowanie();
-		if (m == 1 && h==0) { menu.draw(window); }
-		if (freeze==1 && h ==1)
+		if (m == 1 && h == 0) { menu.draw(window); }
+		if (freeze == 1 && h == 1)
 		{
 			tlo.draw(window);
 			help.draw(window);
-			
+
 		}
-		
-		if (wasExectued == fala-1 && p1.getScore() == Nt*fala) {
+
+		if (wasExectued == fala - 1 && p1.getScore() == Nt * fala) {
 			wasExectued = fala;
 			invadery.setPosition();
 			fala++;
 		}
-		else if (wasExectued == fala - 1 && p1.getScore() + invadery.setZycie(1)+1 == Nt * fala && invadery.getprzeszlo()>0) {
+		else if (wasExectued == fala - 1 && p1.getScore() + invadery.setZycie(1) + 1 == Nt * fala && invadery.getprzeszlo() > 0) {
 			wasExectued = fala;
 			invadery.setPosition();
 			fala++;
 		}
-		oknopomoc->draw();
-		if (zegar.getElapsedTime().asMilliseconds() > zegarS1 && freeze == 0&&m==0 && h==0)
+
+		if (zegar.getElapsedTime().asMilliseconds() > zegarS1 && freeze == 0 && m == 0 && h == 0)
 		{
 			bl.animuj();
 			zegar.restart();
 
 		}
-		if (zegar3.getElapsedTime().asMilliseconds() > zegarS3 && freeze == 0&&m==0) {
-			invadery.move2(15*fala*trudnosc, 0);
-			
+		if (zegar3.getElapsedTime().asMilliseconds() > zegarS3 && freeze == 0 && m == 0) {
+			invadery.move2(1.5 * fala * trudnosc, 0);
+
 			invadery.getInvaders(bl.getPocisk());
 			zegar3.restart();
 		}
-		if (zegar2.getElapsedTime().asSeconds() > zegarS2 && freeze == 0&&sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+		if (zegar2.getElapsedTime().asSeconds() > zegarS2 && freeze == 0 && sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
 		{
 			bl.setPosition(pb.getPosition().x + 20, pb.getPosition().y + 35);
 			zegar2.restart();
 		}
-		if (h == 1 && m ==0) {
+		if (h == 1 && m == 0) {
 			tlo.draw(window);
 			help.draw(window);
-			
+
 		}
-		if (invadery.setZycie(1) < 0)
+			
+		if (invadery.setZycie(1) < 0 && m == 0 && h==0)
 		{
 			go = 1;
 			freeze = 1;
 			tlo.draw(window);
 			window.draw(playerText);
 			gameo.draw(window);
+		}
+		if (drukuj == 1) {
+			tlo.draw(window);
+			playz.readfile();
+			playz.setPlayers();
+			playz.drawPlayers(window);
+			menuz.draw(window);
 
 		}
-		//pl->draw(window);
-		
+		if (czyszcz == 1) {
+			playz.wyczysc();
+		}
+		if (wyj == 1) {
+			tlo.draw(window);
+			wyjsc.draw(window);
+		}
 		window.display();
-
 	}
-	printf("%d", invadery.setZycie(1));
-	p1.drawScore();
 	return 0;
 }
